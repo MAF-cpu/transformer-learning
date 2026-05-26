@@ -513,7 +513,7 @@
             </div>
 
             <div class="key-points">
-                <h4>🎓 Wichtigste Konzepte</h4>
+                <h3>🎓 Wichtigste Konzepte</h3>
                 <ul>
                     <li><strong>Parallel Processing:</strong> Alle Tokens gleichzeitig verarbeitet, nicht sequenziell</li>
                     <li><strong>Self-Attention:</strong> Jedes Token kann mit jedem anderen Token interagieren</li>
@@ -625,7 +625,7 @@ attention_output = attention(sequence, sequence, sequence)  # Alle gleichzeitig!
             </div>
 
             <div class="key-points">
-                <h4>🎓 RNN-Probleme zusammengefasst</h4>
+                <h3>🎓 RNN-Probleme zusammengefasst</h3>
                 <ul>
                     <li><strong>Vanishing Gradients:</strong> Lange Abhängigkeiten können nicht gelernt werden</li>
                     <li><strong>Keine Parallelisierung:</strong> Sequenzielles Processing ist langsam</li>
@@ -822,7 +822,7 @@ def attention(Q, K, V):
             </div>
 
             <div class="key-points">
-                <h4>🎓 Warum Scaled Dot-Product?</h4>
+                <h3>🎓 Warum Scaled Dot-Product?</h3>
                 <ul>
                     <li><strong>Effizient:</strong> Matrix-Multiplikation ist GPU-optimiert</li>
                     <li><strong>Stabil:</strong> Skalierung verhindert explodierende/vanishing Gradienten</li>
@@ -964,7 +964,7 @@ class MultiHeadAttention(nn.Module):
             </div>
 
             <div class="key-points">
-                <h4>🎓 Multi-Head Vorteile</h4>
+                <h3>🎓 Multi-Head Vorteile</h3>
                 <ul>
                     <li><strong>Diverse Repräsentation:</strong> Verschiedene Heads lernen verschiedene Features</li>
                     <li><strong>Robustheit:</strong> Fehler in einem Head werden von anderen kompensiert</li>
@@ -1073,7 +1073,7 @@ def positional_encoding(seq_len, d_model):
             </div>
 
             <div class="key-points">
-                <h4>🎓 Wichtige Eigenschaften</h4>
+                <h3>🎓 Wichtige Eigenschaften</h3>
                 <ul>
                     <li><strong>Relative Positionen:</strong> Modell kann relative Abstände lernen</li>
                     <li><strong>Keine Extrapolation nötig:</strong> Funktioniert auch für längere Sequenzen</li>
@@ -1216,7 +1216,7 @@ class TransformerBlock(nn.Module):
             </div>
 
             <div class="key-points">
-                <h4>🎓 Block-Komponenten erklärt</h4>
+                <h3>🎓 Block-Komponenten erklärt</h3>
                 <ul>
                     <li><strong>Layer Norm:</strong> Stabilisiert das Training – normalisiert pro Sample</li>
                     <li><strong>Residual Connections:</strong> Gradient kann direkt fließen – hilft tiefe Netze</li>
@@ -1390,7 +1390,7 @@ class Transformer(nn.Module):
             </div>
 
             <div class="key-points">
-                <h4>🎓 Komponenten zusammengefasst</h4>
+                <h3>🎓 Komponenten zusammengefasst</h3>
                 <ul>
                     <li><strong>Encoder:</strong> Verarbeitet Input parallel, erzeugt Kontext</li>
                     <li><strong>Decoder:</strong> Generiert Output sequenziell, nutzt Encoder-Kontext</li>
@@ -1408,7 +1408,7 @@ class Transformer(nn.Module):
 
         <!-- Zusammenfassung -->
         <div class="lesson" id="lesson9" style="border-left-color: #10b981;">
-            <h2 style="color: #10b981;"><span class="emoji">🎉</span>Zusammenfassung: Alles zusammen</h2>
+            <h2 style="color: #10b981;"><span class="lesson-number" style="color: #10b981;">9</span><span class="emoji">🎉</span>Zusammenfassung: Alles zusammen</h2>
             
             <p style="font-size: 1.1em; margin: 20px 0;">
                 Du hast es geschafft! Hier ist ein Überblick, was Transformer macht:
@@ -1435,6 +1435,61 @@ class Transformer(nn.Module):
                         <li>✗ Positional Encoding ist nicht perfekt</li>
                     </ul>
                 </div>
+            </div>
+
+            <div class="lesson-image" style="margin-top: 30px; margin-bottom: 30px;">
+                <svg width="100%" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Title -->
+                    <text x="200" y="25" font-size="20" font-weight="bold" text-anchor="middle" fill="#10b981">Transformer Architektur - Überblick</text>
+                    
+                    <!-- Input -->
+                    <rect x="20" y="60" width="80" height="40" fill="#6366f1" rx="4"/>
+                    <text x="60" y="88" font-size="12" text-anchor="middle" fill="white">Input</text>
+                    
+                    <!-- Embedding -->
+                    <rect x="120" y="60" width="80" height="40" fill="#8b5cf6" rx="4"/>
+                    <text x="160" y="88" font-size="12" text-anchor="middle" fill="white">Embedding</text>
+                    <path d="M 100 80 L 120 80" stroke="#a78bfa" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Positional Encoding -->
+                    <rect x="220" y="60" width="80" height="40" fill="#06b6d4" rx="4"/>
+                    <text x="260" y="88" font-size="12" text-anchor="middle" fill="white">Pos. Encoding</text>
+                    <path d="M 200 80 L 220 80" stroke="#a78bfa" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Encoder Stack -->
+                    <g>
+                        <rect x="40" y="150" width="100" height="60" fill="#6366f1" rx="4" opacity="0.8"/>
+                        <text x="90" y="180" font-size="13" font-weight="bold" text-anchor="middle" fill="white">Encoder Stack</text>
+                        <text x="90" y="198" font-size="11" text-anchor="middle" fill="#e0e0e0">(Self-Attention,</text>
+                        <text x="90" y="210" font-size="11" text-anchor="middle" fill="#e0e0e0">Feed-Forward)</text>
+                        <path d="M 300 80 Q 150 120 140 150" stroke="#a78bfa" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    </g>
+                    
+                    <!-- Decoder Stack -->
+                    <g>
+                        <rect x="260" y="150" width="100" height="60" fill="#ec4899" rx="4" opacity="0.8"/>
+                        <text x="310" y="180" font-size="13" font-weight="bold" text-anchor="middle" fill="white">Decoder Stack</text>
+                        <text x="310" y="198" font-size="11" text-anchor="middle" fill="#e0e0e0">(Self-Attention,</text>
+                        <text x="310" y="210" font-size="11" text-anchor="middle" fill="#e0e0e0">Cross-Attention)</text>
+                        <path d="M 300 100 Q 310 125 310 150" stroke="#a78bfa" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    </g>
+                    
+                    <!-- Output -->
+                    <rect x="260" y="260" width="100" height="30" fill="#10b981" rx="4"/>
+                    <text x="310" y="280" font-size="12" text-anchor="middle" fill="white">Output</text>
+                    <path d="M 310 210 L 310 260" stroke="#a78bfa" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Key insight box -->
+                    <rect x="20" y="260" width="180" height="30" fill="rgba(16, 185, 129, 0.2)" stroke="#10b981" stroke-width="1" rx="4"/>
+                    <text x="110" y="280" font-size="11" text-anchor="middle" fill="#10b981" font-weight="bold">🔑 Attention ist das Kernstück</text>
+                    
+                    <!-- Arrow marker -->
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                            <polygon points="0 0, 10 3, 0 6" fill="#a78bfa"/>
+                        </marker>
+                    </defs>
+                </svg>
             </div>
 
             <div style="background: rgba(16, 185, 129, 0.1); padding: 25px; border-radius: 8px; border-left: 4px solid #10b981; margin-top: 30px;">
