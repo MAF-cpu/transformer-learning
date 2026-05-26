@@ -273,6 +273,112 @@
             border-radius: 4px;
             color: #f0f9ff;
         }
+
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: light) {
+            body {
+                color: #1f2937;
+                background: linear-gradient(135deg, #f8f9fa 0%, #f3f4f6 100%);
+            }
+
+            h1 {
+                color: #0f172a;
+                text-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+            }
+
+            .subtitle {
+                color: #6366f1;
+            }
+
+            nav {
+                background: rgba(248, 249, 250, 0.95);
+                border-bottom-color: #6366f1;
+            }
+
+            nav a {
+                color: #6366f1;
+            }
+
+            nav a:hover {
+                background: #6366f1;
+                color: white;
+            }
+
+            .lesson {
+                background: rgba(255, 255, 255, 0.8);
+                border-left-color: #6366f1;
+                color: #1f2937;
+                box-shadow: 0 8px 32px rgba(99, 102, 241, 0.1);
+            }
+
+            .lesson h2 {
+                color: #0f172a;
+            }
+
+            .lesson-text p {
+                color: #4b5563;
+            }
+
+            .lesson-image {
+                background: rgba(99, 102, 241, 0.05);
+            }
+
+            .code-example {
+                background: #f3f4f6;
+                border-color: #6366f1;
+                color: #6366f1;
+            }
+
+            .code-example code {
+                color: #0f172a;
+            }
+
+            .qa-box {
+                background: rgba(99, 102, 241, 0.05);
+                color: #1f2937;
+            }
+
+            .qa-box strong {
+                color: #6366f1;
+            }
+
+            .formula {
+                background: rgba(99, 102, 241, 0.08);
+                border-color: #6366f1;
+                color: #1f2937;
+            }
+
+            .key-points {
+                background: rgba(16, 185, 129, 0.08);
+            }
+
+            .key-points h4 {
+                color: #059669;
+            }
+
+            .key-points li {
+                color: #4b5563;
+            }
+
+            .key-points li:before {
+                color: #059669;
+            }
+
+            footer {
+                border-top-color: #6366f1;
+                color: #6366f1;
+            }
+
+            .highlight {
+                background: rgba(99, 102, 241, 0.15);
+                color: #0f172a;
+            }
+
+            .lesson-number {
+                background: #6366f1;
+                color: white;
+            }
+        }
     </style>
 </head>
 <body>
@@ -291,6 +397,7 @@
             <li><a href="#lesson6">6. Positional Encoding</a></li>
             <li><a href="#lesson7">7. Transformer Block</a></li>
             <li><a href="#lesson8">8. Complete Architektur</a></li>
+            <li><a href="#lesson9">9. Zusammenfassung</a></li>
         </ul>
     </nav>
 
