@@ -162,6 +162,12 @@
             line-height: 1.8;
             font-size: 1.05em;
         }
+        
+        @media (max-width: 480px) {
+            .lesson-text p {
+                font-size: 0.95em;
+            }
+        }
 
         .lesson-image {
             background: rgba(99, 102, 241, 0.1);
@@ -187,10 +193,20 @@
             padding: 20px;
             margin: 20px 0;
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
             font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
             font-size: 0.95em;
             color: #a78bfa;
             line-height: 1.5;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+        
+        @media (max-width: 480px) {
+            .code-example {
+                font-size: 0.85em;
+                padding: 15px;
+            }
         }
 
         .code-example code {
@@ -468,6 +484,12 @@
                     <p>
                         Transformers bestehen aus zwei Hauptkomponenten: einem <span class="highlight">Encoder</span> (versteht die Input-Sequenz) und einem <span class="highlight">Decoder</span> (generiert die Output-Sequenz). Jeder besteht aus gestapelten Blöcken mit Attention- und Feed-Forward-Schichten.
                     </p>
+                    <p>
+                        Ein interessanter Aspekt von Transformers ist ihre <span class="highlight">Auto-Regressive</span> Natur: Der Decoder generiert Tokens sequenziell (eins nach dem anderen), kann aber alle vorherigen Tokens parallel nutzen. Das ist der Grund, warum man LLMs mit Transformers baut – sie können Text Wort-für-Wort genieren, während sie auf alle bisherige Information zugreifen.
+                    </p>
+                    <p>
+                        Praktisch sind moderne Transformer oft <span class="highlight">Decoder-Only</span> Architekturen geworden (wie GPT). Der Grund: Decoder mit Self-Attention ist ausdrucksstark genug für fast alle Aufgaben, und die Architektur ist vereinfacht. Encoder-Decoder Modelle (wie T5) werden aber immer noch für Translation, Summarization und andere Aufgaben verwendet, wo Quell- und Zieltext unterschiedlich lang sind.
+                    </p>
                 </div>
                 <div class="lesson-image">
                     <svg width="100%" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
@@ -544,6 +566,12 @@
                     </p>
                     <p>
                         LSTMs und GRUs versuchen, das zu beheben, aber die fundamentalen Probleme bleiben. Mit Transformers und Attention ist alles anders.
+                    </p>
+                    <p>
+                        Ein praktisches Beispiel: Stell dir einen Satz vor: "Der Manager verführt schnell zum Büro" (Deutsch ist nicht perfekt, aber du verstehst die Idee). In einem RNN musst du Token für Token durch das Netzwerk laufen, und der Gradient für "Manager" (Token 1) muss durch 8 weitere Tokens backpropagiert werden. Nach 8 Schritten ist der Gradient praktisch weg – das Netzwerk "vergisst" die Bedeutung von "Manager". Mit Transformers: "Manager" kann sich direkt mit "Büro" verbinden, unabhängig von der Länge dazwischen.
+                    </p>
+                    <p>
+                        Noch wichtiger für moderne Systeme: Parallelisierung. Wenn du einen Text mit 1000 Tokens hast, braucht ein RNN 1000 sequenzielle GPU-Steps. Aber auf einer modernen GPU kannst du 1000 Tokens in <em>einem</em> Step verarbeiten, wenn es keine sequenzielle Abhängigkeit gibt. Das ist der Grund, warum Transformers so schnell trainierbar sind.
                     </p>
                 </div>
                 <div class="lesson-image">
@@ -651,6 +679,12 @@ attention_output = attention(sequence, sequence, sequence)  # Alle gleichzeitig!
                     </p>
                     <p>
                         Mit Attention können alle Tokens parallel auf alle anderen Tokens "schauen". Wenn Token A die Information von Token B braucht, berechnet der Attention-Mechanismus automatisch ein Gewicht. Keine feste Entfernung, keine Sequenzialisierung – nur reine Semantik.
+                    </p>
+                    <p>
+                        Ein schönes praktisches Bild: Stelle dir vor, du liest einen Text und markierst, welche Wörter zusammengehören. "The cat sat on the mat" – das Wort "sat" ist am wichtigsten für das Verb-Verständnis, "mat" ist wichtig um zu wissen wo das Geschehen passiert. Attention macht genau das: Es berechnet für jedes Token eine "Wichtigkeitsverteilung" über alle anderen Tokens. Die Softmax-Funktion normalisiert diese Gewichte, sodass sie sich zu 1 addieren (eine echte Wahrscheinlichkeitsverteilung).
+                    </p>
+                    <p>
+                        Das Geniale: Diese Gewichte werden während des Trainings gelernt! Das Modell entdeckt von selbst, dass "the" weniger wichtig ist, "cat" und "mat" aber wichtig. Es entdeckt syntaktische und semantische Abhängigkeiten automatisch. Und weil Attention differenzierbar ist, können die Gewichte mit Backpropagation optimiert werden.
                     </p>
                 </div>
                 <div class="lesson-image">
