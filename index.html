@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Transformer Learning - Mobile Lektionen</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary-color: #ec4899;
+            --bg-light: #f8fafc;
+            --bg-dark: #0f172a;
+            --text-light: #1e293b;
+            --text-dark: #f1f5f9;
+            --border-light: #e2e8f0;
+            --border-dark: #334155;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-light);
+            scroll-behavior: smooth;
+        }
+
+        body.dark-mode {
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
+        .app-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1.25rem 1rem;
+            text-align: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+            z-index: 101;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 0.85rem;
+            opacity: 0.95;
+        }
+
+        /* Main Content Area */
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .lessons-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        .lesson {
+            width: 100%;
+            min-height: 100%;
+            flex-shrink: 0;
+            padding: 1.5rem 1rem;
+            display: none;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .lesson.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lesson-content {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 1rem;
+        }
+
+        .lesson h2 {
+            font-size: 1.6rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        body.dark-mode .lesson h2 {
+            color: #60a5fa;
+        }
+
+        .lesson p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+            font-size: 0.95rem;
+            color: var(--text-light);
+        }
+
+        body.dark-mode .lesson p {
+            color: #e2e8f0;
+        }
+
+        .lesson-image {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            margin: 1rem 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--border-light);
+        }
+
+        body.dark-mode .lesson-image {
+            border-color: var(--border-dark);
+        }
+
+        body.dark-mode .lesson-image {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .info-box {
+            background: #dbeafe;
+            border-left: 4px solid #0369a1;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #164e63;
+        }
+
+        body.dark-mode .info-box {
+            background: #0c4a6e;
+            border-left-color: #7dd3fc;
+            color: #cffafe;
+        }
+
+        .quick-check {
+            background: linear-gradient(135deg, #fef3c7, #fde047);
+            border-left: 4px solid #f59e0b;
+            padding: 1.25rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            color: #1e293b;
+        }
+
+        body.dark-mode .quick-check {
+            background: #1f2937;
+            border-left-color: #fbbf24;
+            color: #fef08a;
+        }
+
+        .quick-check h4 {
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+            font-size: 1rem;
+            color: inherit;
+        }
+
+        body.dark-mode .quick-check h4 {
+            color: #fef08a;
+        }
+
+        .quick-check-question {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .quick-check-answer {
+            display: none;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            border-left: 3px solid rgba(255, 255, 255, 0.5);
+        }
+
+        body.dark-mode .quick-check-answer {
+            background: rgba(0, 0, 0, 0.3);
+            border-left-color: rgba(254, 240, 138, 0.7);
+        }
+
+        .quick-check.show-answer .quick-check-answer {
+            display: block;
+        }
+
+        .formula-box {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid var(--primary-color);
+            font-family: monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+
+        body.dark-mode .formula-box {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-left-color: #60a5fa;
+        }
+
+        .canvas-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 1.5rem 0;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            min-height: 250px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        body.dark-mode .canvas-container {
+            background: #1e293b;
+            border-color: var(--border-dark);
+        }
+
+        canvas {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 6px;
+        }
+
+        @media (max-width: 768px) {
+            canvas {
+                max-width: 100%;
+                width: 100%;
+            }
+        }
+
+        /* Navigation Buttons */
+        .lesson-nav {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: space-between;
+            padding: 1rem;
+            flex-shrink: 0;
+            background: white;
+            border-top: 1px solid var(--border-light);
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+            z-index: 102;
+        }
+
+        body.dark-mode .lesson-nav {
+            background: #1e293b;
+            border-top-color: var(--border-dark);
+        }
+
+        .nav-btn {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        .nav-btn:focus {
+            outline: 2px solid white;
+            outline-offset: 2px;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        .nav-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Lesson Indicator */
+        .lesson-indicator {
+            flex-grow: 1;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin: 0 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            gap: 0.25rem;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 0.75rem;
+            background: white;
+            border-bottom: 2px solid var(--border-light);
+            flex-shrink: 0;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+        }
+
+        body.dark-mode .tab-nav {
+            background: #1e293b;
+            border-bottom-color: var(--border-dark);
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.25rem;
+            border: none;
+            background: transparent;
+            color: var(--text-light);
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            border-radius: 4px 4px 0 0;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        body.dark-mode .tab-btn {
+            color: var(--text-dark);
+        }
+
+        .tab-btn:hover {
+            background: var(--bg-light);
+        }
+
+        body.dark-mode .tab-btn:hover {
+            background: #1e293b;
+        }
+
+        .tab-btn:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: -2px;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 90px;
+            right: 1rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            transition: all 0.3s;
+            z-index: 99;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95);
+        }
+
+        .theme-toggle:focus {
+            outline: 2px solid white;
+            outline-offset: 2px;
+        }
+
+        /* Grid for cards */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        @media (min-width: 640px) {
+            .grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .card {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 2px solid var(--border-light);
+            transition: all 0.3s;
+        }
+
+        body.dark-mode .card {
+            background: #0f172a;
+            border-color: var(--border-dark);
+        }
+
+        .card:active {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .card:focus-within {
+            outline: 2px solid var(--primary-color);
+        }
+
+        .card h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        body.dark-mode .card h4 {
+            color: #60a5fa;
+        }
+
+        .card p {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: var(--text-light);
+        }
+
+        body.dark-mode .card p {
+            color: #cbd5e1;
+        }
+
+        /* Interactive Elements */
+        .cta-button {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            width: 100%;
+            margin: 1rem 0;
+            min-height: 48px;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+            transition: all 0.3s;
+        }
+
+        .cta-button:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        .cta-button:active {
+            transform: scale(0.98);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid var(--border-light);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        body.dark-mode .spinner {
+            border-color: var(--border-dark);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive - Landscape Mode */
+        @media (max-height: 500px) {
+            .lesson-content {
+                max-height: 60vh;
+            }
+            
+            .theme-toggle {
+                bottom: 80px;
+            }
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 480px) {
+            .tab-btn {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.75rem;
+            }
+            
+            .nav-btn {
+                font-size: 0.8rem;
+                padding: 0.6rem;
+            }
+            
+            .lesson {
+                padding: 1rem 0.75rem;
+            }
+            
+            header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .lesson h2 {
+                font-size: 1.4rem;
+            }
+        }
+
+        /* Viewport fit for notch phones */
+        @supports (padding: max(0px)) {
+            header {
+                padding-left: max(1rem, env(safe-area-inset-left));
+                padding-right: max(1rem, env(safe-area-inset-right));
+            }
+            
+            .lesson-nav {
+                padding-left: max(1rem, env(safe-area-inset-left));
+                padding-right: max(1rem, env(safe-area-inset-right));
+                padding-bottom: max(1rem, env(safe-area-inset-bottom));
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .lesson-nav, .tab-nav, .theme-toggle {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header>
+            <h1>🤖 Transformer Lektionen</h1>
+            <p id="lessonTitle">Lektion 1: Was ist ein Transformer?</p>
+        </header>
+
+        <!-- Tab Navigation -->
+        <nav class="tab-nav" id="tabNav">
+            <button class="tab-btn active" data-lesson="0">1️⃣ Basics</button>
+            <button class="tab-btn" data-lesson="1">2️⃣ Attention</button>
+            <button class="tab-btn" data-lesson="2">3️⃣ Multi-Head</button>
+            <button class="tab-btn" data-lesson="3">4️⃣ Positional</button>
+            <button class="tab-btn" data-lesson="4">5️⃣ Flow</button>
+            <button class="tab-btn" data-lesson="5">6️⃣ Code</button>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="content-area">
+            <div class="lessons-container" id="lessonsContainer">
+                <!-- Lektion 1: Basics -->
+                <div class="lesson active" data-lesson="0">
+                    <div class="lesson-content">
+                        <h2>📚 Was ist ein Transformer?</h2>
+                        
+                        <img src="https://via.placeholder.com/400x250/6366f1/ffffff?text=Transformer+Architektur" alt="Transformer Grundlagen Illustration" class="lesson-image">
+
+                        <div class="info-box">
+                            <strong>Einfach erklärt:</strong> Ein Transformer ist ein Netzwerk, das Text versteht, indem es schaut, welche Wörter zusammenpassen. Das Geheimnis: der <strong>Self-Attention</strong> Mechanismus!
+                        </div>
+
+                        <p>Der Transformer ist die Grundlage moderner AI-Modelle wie GPT, Claude und BERT. Statt Wörter eins nach dem anderen zu verarbeiten (wie alte RNNs), schaut ein Transformer auf <strong>alle Wörter auf einmal</strong> und lernt ihre Beziehungen.</p>
+
+                        <div class="grid">
+                            <div class="card">
+                                <h4>⚡ Hauptvorteil</h4>
+                                <p>Parallel statt sequenziell — viel schneller!</p>
+                            </div>
+                            <div class="card">
+                                <h4>🧠 Kern-Idee</h4>
+                                <p>Jedes Wort kann auf andere Wörter "achten"</p>
+                            </div>
+                            <div class="card">
+                                <h4>🚀 Einsatzgebiete</h4>
+                                <p>ChatGPT, Google Translate, Content-Generierung</p>
+                            </div>
+                        </div>
+
+                        <div class="info-box" style="background: linear-gradient(135deg, #fef3c7, #fde047); border-left-color: #f59e0b; color: #000;">
+                            <strong>🔍 Die 5 Schritte:</strong>
+                            <ol style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                                <li><strong>Tokenize:</strong> Text → Wörter/Tokens</li>
+                                <li><strong>Embedding:</strong> Wörter → Zahlen-Vektoren</li>
+                                <li><strong>Positions-Encoding:</strong> Position hinzufügen</li>
+                                <li><strong>Self-Attention:</strong> Welche Wörter sind relevant?</li>
+                                <li><strong>Output:</strong> Nächstes Wort vorhersagen</li>
+                            </ol>
+                        </div>
+
+                        <div class="quick-check">
+                            <h4>❓ Quick Check 1</h4>
+                            <div class="quick-check-question">Was ist der Hauptvorteil eines Transformers gegenüber RNNs?</div>
+                            <button class="cta-button" onclick="toggleAnswer(this)">Zeige Antwort</button>
+                            <div class="quick-check-answer">✅ <strong>Parallele Verarbeitung:</strong> Alle Tokens können gleichzeitig verarbeitet werden, nicht sequenziell wie bei RNNs. Das macht Transformers viel schneller!</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lektion 2: Self-Attention -->
+                <div class="lesson" data-lesson="1">
+                    <div class="lesson-content">
+                        <h2>🔍 Self-Attention Mechanismus</h2>
+                        
+                        <img src="https://via.placeholder.com/400x250/ec4899/ffffff?text=Self-Attention+QKV" alt="Self-Attention Query-Key-Value" class="lesson-image">
+
+                        <div class="info-box">
+                            <strong>🍴 Restaurant-Analogie:</strong> Du sitzt im Restaurant und hörst verschiedene Tische:
+                            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                                <li>Tisch 1: "Super Essen!" 🌟🌟🌟🌟🌟</li>
+                                <li>Tisch 2: "Okay, aber teuer" 🌟🌟</li>
+                                <li>Tisch 3: "Schrecklich!" ❌</li>
+                            </ul>
+                            <p style="margin-top: 0.5rem;"><strong>Dein Gehirn:</strong> Gewichtet die positive Bewertung stärker. Das ist Attention!</p>
+                        </div>
+
+                        <div class="info-box">
+                            <strong>🎯 Die drei Komponenten:</strong>
+                            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                                <li><strong>Query (Q):</strong> "Was möchte ich wissen?"</li>
+                                <li><strong>Key (K):</strong> "Passt dieses Wort zu meiner Frage?"</li>
+                                <li><strong>Value (V):</strong> "Welche Information trägt dieses Wort bei?"</li>
+                            </ul>
+                        </div>
+
+                        <div class="formula-box">
+                            <strong>Die Formel:</strong><br>
+                            Attention = softmax(Q × K / √d_k) × V
+                            <hr style="margin: 0.5rem 0; opacity: 0.3;">
+                            <strong>Was passiert:</strong><br>
+                            1. Q×K berechnet Ähnlichkeiten<br>
+                            2. Durch √d_k teilen (stabilisieren)<br>
+                            3. Softmax → Prozentgewichte<br>
+                            4. Gewichte × V → Output
+                        </div>
+
+                        <div class="info-box" style="background: linear-gradient(135deg, #dbeafe, #bfdbfe); border-left-color: #3b82f6; color: #000;">
+                            <strong>💡 Warum durch √d_k teilen?</strong>
+                            <p style="margin-top: 0.5rem;"><strong>Das Problem ohne Skalierung:</strong> Die Scores werden zu "wild" — ein Token dominiert mit 99.9%, alle anderen Tokens werden ignoriert.</p>
+                            <p><strong>Die Lösung:</strong> Mit √d_k teilen macht die Scores "glatt" — alle Tokens bekommen sinnvolle Aufmerksamkeit!</p>
+                        </div>
+
+                        <div class="quick-check">
+                            <h4>❓ Quick Check 2</h4>
+                            <div class="quick-check-question">Was ist die Rolle von "softmax" in der Attention-Berechnung?</div>
+                            <button class="cta-button" onclick="toggleAnswer(this)">Zeige Antwort</button>
+                            <div class="quick-check-answer">✅ <strong>Softmax konvertiert Scores zu Prozentanteilen:</strong> Ein Score von [2.0, 1.5, 0.5] wird zu [70%, 20%, 10%]. Diese Prozentanteile sind die Attention-Gewichte!</div>
+                        </div>
+
+                        <div class="canvas-container">
+                            <div style="text-align: center;">
+                                <p style="margin-bottom: 1rem; font-weight: 600;">📊 Attention Heatmap (Visualisierung)</p>
+                                <canvas id="attentionCanvas1" width="300" height="300" role="img" aria-label="Attention Heatmap"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lektion 3: Multi-Head Attention -->
+                <div class="lesson" data-lesson="2">
+                    <div class="lesson-content">
+                        <h2>🔀 Multi-Head Attention</h2>
+                        
+                        <img src="https://via.placeholder.com/400x250/10b981/ffffff?text=Multiple+Attention+Heads" alt="Multi-Head Attention Visualisierung" class="lesson-image">
+
+                        <div class="info-box">
+                            <strong>💡 Die Idee:</strong> Nicht mit 1 Auge schauen, sondern mit 8 Augen! Jedes Auge lernt andere Muster:
+                            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                                <li>👁️ Head 1: Fokussiert auf <strong>Grammatik</strong></li>
+                                <li>👁️ Head 2: Fokussiert auf <strong>Bedeutung</strong></li>
+                                <li>👁️ Head 3: Fokussiert auf <strong>Position</strong></li>
+                                <li>👁️ Head 4-8: Andere subtile Muster...</li>
+                            </ul>
+                        </div>
+
+                        <p>Mit mehreren Attention-Köpfen lernt der Transformer, <strong>gleichzeitig mehrere Arten von Beziehungen</strong> zwischen Wörtern zu verstehen. Das macht ihn viel intelligenter!</p>
+
+                        <div class="formula-box">
+                            <strong>Die Berechnung:</strong><br>
+                            Jeden Head berechnen (8 × Attention)<br>
+                            Alle Heads zusammen (Concatenate)<br>
+                            → 1 großer Output-Vektor
+                        </div>
+
+                        <div class="grid">
+                            <div class="card">
+                                <h4>🎯 Head 1</h4>
+                                <p><strong>Grammatik:</strong> Verben, Subjekt, Objekt erkennen</p>
+                            </div>
+                            <div class="card">
+                                <h4>🎯 Head 2</h4>
+                                <p><strong>Semantik:</strong> Wortbedeutungen verbinden</p>
+                            </div>
+                            <div class="card">
+                                <h4>🎯 Head 3</h4>
+                                <p><strong>Referenzen:</strong> "Er", "sie" → wahres Subjekt</p>
+                            </div>
+                            <div class="card">
+                                <h4>🎯 Head 4+</h4>
+                                <p><strong>Details:</strong> Subtile Muster & Idiome</p>
+                            </div>
+                        </div>
+
+                        <div class="canvas-container">
+                            <div style="text-align: center;">
+                                <p style="margin-bottom: 1rem; font-weight: 600;">🎨 Multi-Head Pattern (Visualisierung)</p>
+                                <canvas id="multiHeadCanvas1" width="300" height="250" role="img" aria-label="Multi-Head Patterns"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="quick-check">
+                            <h4>❓ Quick Check 3</h4>
+                            <div class="quick-check-question">Warum sind mehrere Attention-Köpfe besser als nur einer?</div>
+                            <button class="cta-button" onclick="toggleAnswer(this)">Zeige Antwort</button>
+                            <div class="quick-check-answer">✅ <strong>Spezialisierung:</strong> Jeder Head kann auf ein anderes Muster fokussieren (Grammatik, Bedeutung, Position, etc.). Das kombiniert gibt ein viel besseres Verständnis der Sprache!</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lektion 4: Positional Encoding -->
+                <div class="lesson" data-lesson="3">
+                    <div class="lesson-content">
+                        <h2>📍 Positional Encoding</h2>
+                        
+                        <img src="https://via.placeholder.com/400x250/8b5cf6/ffffff?text=Positional+Encoding+Pattern" alt="Positional Encoding Sinus-Wellen" class="lesson-image">
+
+                        <div class="info-box">
+                            <strong>❓ Das Problem:</strong> Ein Transformer schaut auf alle Wörter gleichzeitig. Wie weiß er, an welcher Position jedes Wort steht?
+                            <p style="margin-top: 0.5rem;"><strong>✅ Die Lösung:</strong> Positional Encoding — ein mathematisches Muster, das Position kodiert!</p>
+                        </div>
+
+                        <div class="info-box" style="background: linear-gradient(135deg, #fef3c7, #fde047); border-left-color: #f59e0b; color: #000;">
+                            <strong>🌊 Warum Sinus/Cosinus?</strong>
+                            <p style="margin-top: 0.5rem;"><strong>NICHT:</strong> Position 1, 2, 3, 4... (wächst unbegrenzt!)</p>
+                            <p><strong>JA:</strong> sin(pos), cos(pos), sin(pos/100), cos(pos/100)... (periodisch, -1 bis +1)</p>
+                            <p style="margin-top: 0.5rem;"><strong>Warum?</strong> Sinus-Wellen sind periodisch — der Transformer kann damit Positionen extrapolieren, die er im Training nicht sah!</p>
+                        </div>
+
+                        <p><strong>🔑 Merksatz:</strong> Positional Encoding addet einen "Positions-Fingerprint" zu jedem Wort. Der Transformer lernt aus diesem Pattern, wo Wörter stehen!</p>
+
+                        <div class="canvas-container">
+                            <div style="text-align: center;">
+                                <p style="margin-bottom: 1rem; font-weight: 600;">🌊 Positional Encoding Muster</p>
+                                <canvas id="posEncodingCanvas1" width="300" height="200" role="img" aria-label="Positional Encoding Visualization"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="grid">
+                            <div class="card">
+                                <h4>📈 Hohe Frequenzen</h4>
+                                <p>Wechseln schnell — erfassen lokale Positionen</p>
+                            </div>
+                            <div class="card">
+                                <h4>📉 Tiefe Frequenzen</h4>
+                                <p>Wechseln langsam — erfassen globale Positionen</p>
+                            </div>
+                        </div>
+
+                        <div class="quick-check">
+                            <h4>❓ Quick Check 4</h4>
+                            <div class="quick-check-question">Warum verwenden wir sin/cos statt einfach die Position (1, 2, 3, 4)?</div>
+                            <button class="cta-button" onclick="toggleAnswer(this)">Zeige Antwort</button>
+                            <div class="quick-check-answer">✅ <strong>Skalierbarkeit & Extrapolation:</strong> Sin/Cos-Werte bleiben zwischen -1 und +1, egal wie groß die Position ist. Der Transformer kann damit auch längere Texte verarbeiten, als er im Training sah!</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lektion 5: Token Flow -->
+                <div class="lesson" data-lesson="4">
+                    <div class="lesson-content">
+                        <h2>🔄 Token Flow durch einen Transformer</h2>
+                        
+                        <img src="https://via.placeholder.com/400x250/f59e0b/ffffff?text=Token+Journey" alt="Token Flow Diagramm" class="lesson-image">
+
+                        <div class="info-box">
+                            <strong>📖 Ein konkretes Beispiel:</strong>
+                            <p style="margin-top: 0.5rem;">Eingabe: "Transformers sind großartig"</p>
+                        </div>
+
+                        <p><strong>Schritt 1: Tokenisieren</strong><br>
+                        "Transformers sind großartig" → ["Transformers", "sind", "großartig"]</p>
+
+                        <p><strong>Schritt 2: Token zu IDs</strong><br>
+                        ["Transformers", "sind", "großartig"] → [1504, 492, 8372]<br>
+                        (Jedes Wort hat eine eindeutige Nummer im Vokabular)</p>
+
+                        <p><strong>Schritt 3: Embedding</strong><br>
+                        Jede ID wird zu einem 512-dimensionalen Vektor konvertiert. Das ist wie: "Transformers = [0.2, -0.5, 0.1, ..., 0.3]"</p>
+
+                        <p><strong>Schritt 4: Position addieren</strong><br>
+                        [0.2, -0.5, 0.1, ...] + [0.1, 0.3, -0.2, ...] (Position 0)<br>
+                        Das kombiniert Wort-Bedeutung + Position!</p>
+
+                        <p><strong>Schritt 5: Self-Attention</strong><br>
+                        Jedes Wort schaut auf alle anderen Wörter: "Was ist für mich relevant?" Die Gewichte werden gelernt!</p>
+
+                        <p><strong>Schritt 6: Output</strong><br>
+                        Nach Attention-Blöcken: Nächstes Wort vorhersagen. Das System gibt Wahrscheinlichkeiten: "ist" (90%), "werden" (5%), "haben" (3%)</p>
+
+                        <div class="grid">
+                            <div class="card">
+                                <h4>1️⃣ Tokenize</h4>
+                                <p>Text → Wörter/Tokens</p>
+                            </div>
+                            <div class="card">
+                                <h4>2️⃣ IDs</h4>
+                                <p>Wörter → Zahlen</p>
+                            </div>
+                            <div class="card">
+                                <h4>3️⃣ Embedding</h4>
+                                <p>Zahlen → Vektoren</p>
+                            </div>
+                            <div class="card">
+                                <h4>4️⃣ Position</h4>
+                                <p>+ Position-Info</p>
+                            </div>
+                            <div class="card">
+                                <h4>5️⃣ Attention</h4>
+                                <p>Relationen lernen</p>
+                            </div>
+                            <div class="card">
+                                <h4>6️⃣ Output</h4>
+                                <p>Nächstes Wort</p>
+                            </div>
+                        </div>
+
+                        <div class="quick-check">
+                            <h4>❓ Quick Check 5</h4>
+                            <div class="quick-check-question">Warum ist es wichtig, Position vor Attention zu addieren?</div>
+                            <button class="cta-button" onclick="toggleAnswer(this)">Zeige Antwort</button>
+                            <div class="quick-check-answer">✅ <strong>Ohne Position:</strong> Der Transformer kann die Reihenfolge der Wörter nicht unterscheiden. "Hund jagt Katze" und "Katze jagt Hund" würden gleich aussehen! Mit Position kennt er, welches Wort an welcher Stelle ist.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lektion 6: Code & Praktikum -->
+                <div class="lesson" data-lesson="5">
+                    <div class="lesson-content">
+                        <h2>💻 Code & Praktikum</h2>
+                        
+                        <img src="https://via.placeholder.com/400x250/3b82f6/ffffff?text=PyTorch+Code" alt="PyTorch Implementation" class="lesson-image">
+
+                        <div class="info-box">
+                            <strong>🔧 Praktische Implementation in PyTorch</strong>
+                            <p style="margin-top: 0.5rem;">Hier ist echter, produktionsreifer Code zum Kopieren!</p>
+                        </div>
+
+                        <p><strong>Die drei Komponenten:</strong></p>
+
+                        <div class="formula-box">
+                            <strong>1. Scaled Dot-Product Attention</strong>
+                            <pre style="font-size: 0.8rem; overflow-x: auto;">def attention(Q, K, V, d_k):
+    scores = (Q @ K.T) / sqrt(d_k)
+    weights = softmax(scores)
+    return weights @ V</pre>
+                        </div>
+
+                        <div class="formula-box">
+                            <strong>2. Multi-Head Attention</strong>
+                            <pre style="font-size: 0.8rem; overflow-x: auto;">class MultiHeadAttn(nn.Module):
+    def __init__(self, d_model, heads):
+        self.heads = heads
+        self.d_k = d_model // heads
+    
+    def forward(self, Q, K, V):
+        # Split in heads, apply attn
+        # Concat results
+        return output</pre>
+                        </div>
+
+                        <div class="formula-box">
+                            <strong>3. Transformer Block</strong>
+                            <pre style="font-size: 0.8rem; overflow-x: auto;">class TransformerBlock(nn.Module):
+    def forward(self, x):
+        # Attention
+        x = x + attn(x)
+        # Feed-forward
+        x = x + ffn(x)
+        return x</pre>
+                        </div>
+
+                        <div class="info-box" style="background: #d1fae5; border-left-color: #10b981; color: #000;">
+                            <strong>✅ Nächste Schritte:</strong>
+                            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                                <li>Google Colab öffnen und den Code testen</li>
+                                <li>Mit kleinen Modellen experimentieren</li>
+                                <li>Verschiedene Architektur-Varianten ausprobieren</li>
+                                <li>Selbst ein Mini-Transformer trainieren</li>
+                            </ul>
+                        </div>
+
+                        <button class="cta-button" style="background: linear-gradient(135deg, #10b981, #059669);">
+                            📚 Vollständigen Code auf GitHub anschauen
+                        </button>
+
+                        <div class="quick-check">
+                            <h4>❓ Final Check</h4>
+                            <div class="quick-check-question">Kannst du die 6 Lektionen zusammenfassen?</div>
+                            <button class="cta-button" onclick="toggleAnswer(this)">Zeige Zusammenfassung</button>
+                            <div class="quick-check-answer">✅ <strong>Die Essenz:</strong> Transformers nutzen Attention um zu lernen, welche Wörter miteinander relevant sind. Multi-Head Attention schaut aus vielen Blickwinkeln. Positional Encoding sagt dem Transformer die Wort-Positionen. So entstehen die mächtigsten Language Models! 🚀</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="lesson-nav">
+            <button class="nav-btn" id="prevBtn" onclick="previousLesson()">← Zurück</button>
+            <div class="lesson-indicator">
+                <span id="currentLessonNum">1</span> / <span id="totalLessons">6</span>
+            </div>
+            <button class="nav-btn" id="nextBtn" onclick="nextLesson()">Weiter →</button>
+        </div>
+
+        <!-- Theme Toggle Button -->
+        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
+    </div>
+
+    <script>
+        // Global State
+        let currentLesson = 0;
+        const totalLessons = 6;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+        });
+
+        function initializeApp() {
+            // Load theme preference
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('themeToggle').textContent = '☀️';
+                document.getElementById('themeToggle').setAttribute('aria-label', 'Zum Light Mode wechseln');
+            } else {
+                document.getElementById('themeToggle').setAttribute('aria-label', 'Zum Dark Mode wechseln');
+            }
+
+            // Set up tab navigation
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const lessonNum = parseInt(this.dataset.lesson);
+                    goToLesson(lessonNum);
+                });
+            });
+            
+            // Initialize canvas elements after DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => {
+                    requestAnimationFrame(() => {
+                        drawAttentionHeatmap();
+                        drawMultiHeadPatterns();
+                        drawPositionalEncoding();
+                    });
+                });
+            } else {
+                requestAnimationFrame(() => {
+                    drawAttentionHeatmap();
+                    drawMultiHeadPatterns();
+                    drawPositionalEncoding();
+                });
+            }
+
+            updateUI();
+            
+            // Handle window resize for responsive canvas
+            window.addEventListener('resize', debounce(() => {
+                drawAttentionHeatmap();
+                drawMultiHeadPatterns();
+                drawPositionalEncoding();
+            }, 300));
+        }
+        
+        // Debounce helper for resize events
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        function goToLesson(lessonNum) {
+            if (lessonNum < 0 || lessonNum >= totalLessons) return;
+            
+            // Remove active from all lessons and tabs
+            document.querySelectorAll('.lesson').forEach(l => l.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            
+            // Add active to current lesson and tab
+            document.querySelector(`.lesson[data-lesson="${lessonNum}"]`).classList.add('active');
+            document.querySelector(`.tab-btn[data-lesson="${lessonNum}"]`).classList.add('active');
+            
+            currentLesson = lessonNum;
+            updateUI();
+            
+            // Scroll to top
+            document.querySelector('.content-area').scrollTop = 0;
+        }
+
+        function nextLesson() {
+            if (currentLesson < totalLessons - 1) {
+                goToLesson(currentLesson + 1);
+            }
+        }
+
+        function previousLesson() {
+            if (currentLesson > 0) {
+                goToLesson(currentLesson - 1);
+            }
+        }
+
+        function updateUI() {
+            // Update buttons
+            document.getElementById('prevBtn').disabled = currentLesson === 0;
+            document.getElementById('nextBtn').disabled = currentLesson === totalLessons - 1;
+            
+            // Update indicator
+            document.getElementById('currentLessonNum').textContent = currentLesson + 1;
+            document.getElementById('totalLessons').textContent = totalLessons;
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            const themeBtn = document.getElementById('themeToggle');
+            themeBtn.textContent = isDark ? '☀️' : '🌙';
+            themeBtn.setAttribute('aria-label', isDark ? 'Zum Light Mode wechseln' : 'Zum Dark Mode wechseln');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            
+            // Redraw canvas for dark mode
+            setTimeout(() => {
+                drawAttentionHeatmap();
+                drawMultiHeadPatterns();
+                drawPositionalEncoding();
+            }, 100);
+        }
+
+        function toggleAnswer(btn) {
+            const quickCheck = btn.closest('.quick-check');
+            quickCheck.classList.toggle('show-answer');
+            btn.textContent = quickCheck.classList.contains('show-answer') ? 'Verberge Antwort' : 'Zeige Antwort';
+            btn.setAttribute('aria-expanded', quickCheck.classList.contains('show-answer'));
+        }
+
+        // Canvas Visualizations
+        function drawAttentionHeatmap() {
+            const canvas = document.getElementById('attentionCanvas1');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            const size = 6; // 6x6 grid
+            const cellSize = canvas.width / size;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Background
+            ctx.fillStyle = isDarkMode ? '#1e293b' : 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < size; j++) {
+                    // Create attention pattern (diagonal + some randomness)
+                    const distance = Math.abs(i - j);
+                    const attention = Math.exp(-distance * distance / 4);
+                    // Use better color scale: high attention = warm colors, low = cool colors
+                    const hue = (1 - attention) * 240; // 240° = blue (low), 0° = red (high)
+                    
+                    ctx.fillStyle = `hsl(${hue}, 80%, 50%)`;
+                    ctx.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
+                    
+                    // Border
+                    ctx.strokeStyle = isDarkMode ? '#475569' : '#cbd5e1';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(i * cellSize, j * cellSize, cellSize, cellSize);
+                }
+            }
+            
+            // Add axis labels
+            ctx.fillStyle = isDarkMode ? '#cbd5e1' : '#475569';
+            ctx.font = 'bold 11px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            for (let i = 0; i < size; i++) {
+                ctx.fillText(`${i}`, i * cellSize + cellSize / 2, canvas.height - 5);
+                ctx.fillText(`${i}`, 8, i * cellSize + cellSize / 2);
+            }
+        }
+
+        function drawMultiHeadPatterns() {
+            const canvas = document.getElementById('multiHeadCanvas1');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            const heads = 4;
+            const cols = 2;
+            const rows = 2;
+            
+            const w = canvas.width / cols;
+            const h = canvas.height / rows;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Background
+            ctx.fillStyle = isDarkMode ? '#0f172a' : 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            const colors = ['#60a5fa', '#f472b6', '#34d399', '#fbbf24'];
+            const patterns = [
+                { name: 'Grammatik', pattern: (i, j) => Math.sin(i * 0.5) * Math.cos(j * 0.5) },
+                { name: 'Bedeutung', pattern: (i, j) => Math.exp(-(i - j) ** 2 / 3) },
+                { name: 'Position', pattern: (i, j) => (i + j) / 10 },
+                { name: 'Details', pattern: (i, j) => Math.sin(i * j / 5) }
+            ];
+            
+            patterns.forEach((p, headIdx) => {
+                const row = Math.floor(headIdx / cols);
+                const col = headIdx % cols;
+                const x = col * w;
+                const y = row * h;
+                
+                // Draw pattern
+                const cellW = w / 6;
+                const cellH = h / 6;
+                
+                for (let i = 0; i < 6; i++) {
+                    for (let j = 0; j < 6; j++) {
+                        const val = p.pattern(i, j);
+                        const normalized = (val + 1) / 2; // Map to 0-1
+                        const alpha = Math.max(0.1, Math.min(1, normalized));
+                        
+                        ctx.fillStyle = colors[headIdx];
+                        ctx.globalAlpha = alpha;
+                        ctx.fillRect(x + i * cellW, y + j * cellH, cellW, cellH);
+                    }
+                }
+                
+                ctx.globalAlpha = 1;
+                ctx.strokeStyle = isDarkMode ? '#475569' : '#d1d5db';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(x, y, w, h);
+                
+                ctx.fillStyle = colors[headIdx];
+                ctx.font = 'bold 12px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+                ctx.fillText(p.name, x + w / 2, y + h - 3);
+            });
+        }
+
+        function drawPositionalEncoding() {
+            const canvas = document.getElementById('posEncodingCanvas1');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            const seqLen = 20; // sequence length
+            const d = 16; // embedding dimensions to show
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Background
+            ctx.fillStyle = isDarkMode ? '#0f172a' : 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            const cellW = canvas.width / seqLen;
+            const cellH = canvas.height / d;
+            
+            for (let pos = 0; pos < seqLen; pos++) {
+                for (let i = 0; i < d; i++) {
+                    // Sinusoidal positional encoding
+                    const angle = pos / Math.pow(10000, (2 * i) / d);
+                    const val = i % 2 === 0 ? Math.sin(angle) : Math.cos(angle);
+                    
+                    // Map to color (blue = negative, red = positive)
+                    const normalized = (val + 1) / 2;
+                    const hue = (1 - normalized) * 240; // 240° = blue, 0° = red
+                    
+                    ctx.fillStyle = `hsl(${hue}, 80%, 50%)`;
+                    ctx.fillRect(pos * cellW, i * cellH, cellW, cellH);
+                }
+            }
+            
+            // Add position labels
+            ctx.fillStyle = isDarkMode ? '#cbd5e1' : '#475569';
+            ctx.font = 'bold 10px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+            for (let i = 0; i < seqLen; i += 5) {
+                ctx.fillText(`${i}`, i * cellW + cellW / 2, canvas.height + 2);
+            }
+        }
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                nextLesson();
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                previousLesson();
+            }
+        });
+
+        // Touch swipe support
+        let touchStartX = 0;
+        let touchStartTime = 0;
+        const contentArea = document.querySelector('.content-area');
+        
+        contentArea.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartTime = Date.now();
+        }, { passive: true });
+
+        contentArea.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndTime = Date.now();
+            const timeDiff = touchEndTime - touchStartTime;
+            const diff = touchStartX - touchEndX;
+            
+            // Only register swipe if it's quick (< 500ms) and significant distance (> 50px)
+            if (timeDiff < 500 && Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    nextLesson();
+                } else {
+                    previousLesson();
+                }
+            }
+        }, { passive: true });
+        
+        // Prevent accidental double-tap zoom on buttons
+        document.addEventListener('touchend', function() {
+            if (event.touches.length === 0) {
+                // Remove :active state after touch
+            }
+        }, false);
+    </script>
+</body>
+</html>
