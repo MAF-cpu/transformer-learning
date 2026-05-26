@@ -56,7 +56,7 @@
             padding: 1.5rem 1rem;
         }
         .lesson { display: none; }
-        .lesson.active { display: block; }
+        .lesson.active { display: block !important; }
         .lesson h2 { color: var(--primary); margin-bottom: 1rem; font-size: 1.4rem; }
         .lesson p { margin-bottom: 0.8rem; line-height: 1.7; }
         .lesson ul { margin-left: 1.5rem; margin-bottom: 1rem; }
@@ -121,7 +121,7 @@
             <button class="tab" onclick="goTo(6)">6️⃣ Code</button>
         </div>
         <div class="content">
-            <div class="lesson active" data-idx="0">
+            <div class="lesson active" data-idx="0" style="display: block;">
                 <h2>🔄 RNNs vs. Transformers</h2>
                 <p><strong>RNNs:</strong> Token für Token (sequenziell) → langsam, aber einfach</p>
                 <p><strong>Transformers:</strong> Alle Tokens parallel → schnell, stärker, moderner!</p>
@@ -191,6 +191,12 @@
     <script>
         let curr = 0;
         const total = 7;
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('[data-idx="0"]').classList.add('active');
+            document.querySelectorAll('.tab')[0].classList.add('active');
+        });
         
         function goTo(n) {
             if (n < 0 || n >= total) return;
