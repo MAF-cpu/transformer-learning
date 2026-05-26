@@ -343,7 +343,28 @@
         }
 
         /* Dark Mode Support */
-        @media (prefers-color-scheme: light) {
+        
+        nav a:focus-visible {
+            outline: 2px solid #a78bfa;
+            outline-offset: 2px;
+        }
+        
+        .code-example:focus-visible,
+        .qa-box:focus-visible,
+        .formula:focus-visible,
+        .key-points:focus-visible {
+            outline: 2px solid #a78bfa;
+            outline-offset: 2px;
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+
+@media (prefers-color-scheme: light) {
             body {
                 color: #1f2937;
                 background: linear-gradient(135deg, #f8f9fa 0%, #f3f4f6 100%);
@@ -492,7 +513,7 @@
                     </p>
                 </div>
                 <div class="lesson-image">
-                    <svg width="100%" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="100%" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Transformer Encoder-Decoder Architektur mit selbstverursachter Aufmerksamkeit und Feed-Forward-Schichten">
                         <defs>
                             <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
                                 <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
@@ -575,7 +596,7 @@
                     </p>
                 </div>
                 <div class="lesson-image">
-                    <svg width="100%" viewBox="0 0 300 350" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="100%" viewBox="0 0 300 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vergleich: Sequenzielles RNN Processing vs. Paralleles Transformer Processing">
                         <!-- RNN Sequenz -->
                         <g>
                             <text x="150" y="25" text-anchor="middle" font-size="14" font-weight="bold" fill="#f0f9ff">Sequenzielles RNN Processing</text>
@@ -688,7 +709,7 @@ attention_output = attention(sequence, sequence, sequence)  # Alle gleichzeitig!
                     </p>
                 </div>
                 <div class="lesson-image">
-                    <svg width="100%" viewBox="0 0 300 350" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="100%" viewBox="0 0 300 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vergleich: Sequenzielles RNN Processing vs. Paralleles Transformer Processing">
                         <text x="150" y="25" text-anchor="middle" font-size="14" font-weight="bold" fill="#f0f9ff">Attention Mechanismus</text>
                         
                         <!-- Input -->
