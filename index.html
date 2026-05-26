@@ -33,6 +33,8 @@
             text-align: center;
             padding: 40px 20px;
             border-bottom: 3px solid #6366f1;
+            position: relative;
+            z-index: 50;
         }
 
         h1 {
@@ -49,14 +51,25 @@
         }
 
         nav {
-            position: sticky;
+            position: fixed;
             top: 0;
+            width: 100%;
             background: rgba(15, 15, 30, 0.95);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid #6366f1;
             padding: 15px 0;
             z-index: 100;
-            margin-bottom: 40px;
+            transition: transform 0.3s ease-out;
+            left: 0;
+            right: 0;
+        }
+
+        nav.hidden {
+            transform: translateY(-100%);
+        }
+
+        body.nav-fixed {
+            padding-top: 70px;
         }
 
         nav ul {
@@ -264,8 +277,37 @@
                 gap: 5px;
             }
 
+            nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                width: 100%;
+            }
+
+            body.nav-fixed {
+                padding-top: 70px;
+            }
+
             .lesson {
                 padding: 25px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            nav {
+                position: sticky !important;
+                top: 0;
+                transform: none !important;
+                margin-bottom: 40px;
+            }
+
+            nav.hidden {
+                transform: none !important;
+            }
+
+            body.nav-fixed {
+                padding-top: 0;
             }
         }
 
@@ -1411,5 +1453,65 @@ class Transformer(nn.Module):
         <p>🤖 Transformer Learning – Eine Reise durch moderne NLP</p>
         <p style="font-size: 0.9em; margin-top: 10px;">Gebaut mit ❤️ für Deep Learning Enthusiasten</p>
     </footer>
+
+    <script>
+        // Smart Navigation: Hide on scroll down, show on scroll up (mobile only)
+        const nav = document.querySelector('nav');
+        const body = document.body;
+        let lastScrollTop = 0;
+        let scrollTimeout;
+        const SCROLL_THRESHOLD = 5; // Pixels to scroll before triggering
+
+        function updateNavVisibility() {
+            // Only apply auto-hide on mobile (max-width: 768px)
+            if (window.innerWidth <= 768) {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                // Show nav on scroll up
+                if (scrollTop < lastScrollTop - SCROLL_THRESHOLD) {
+                    nav.classList.remove('hidden');
+                    body.classList.add('nav-fixed');
+                }
+                // Hide nav on scroll down (unless near top)
+                else if (scrollTop > lastScrollTop + SCROLL_THRESHOLD && scrollTop > 100) {
+                    nav.classList.add('hidden');
+                    body.classList.add('nav-fixed');
+                }
+                // Show nav when near top
+                else if (scrollTop < 50) {
+                    nav.classList.remove('hidden');
+                    body.classList.add('nav-fixed');
+                }
+                
+                lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+            } else {
+                // Desktop: ensure nav is visible
+                nav.classList.remove('hidden');
+                body.classList.remove('nav-fixed');
+            }
+        }
+
+        // Debounced scroll listener
+        window.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(updateNavVisibility, 10);
+        }, false);
+
+        // Handle window resize
+        window.addEventListener('resize', updateNavVisibility);
+
+        // Initialize on page load
+        window.addEventListener('load', updateNavVisibility);
+        
+        // Also handle on DOM ready
+        document.addEventListener('DOMContentLoaded', () => {
+            updateNavVisibility();
+            // Show nav by default on load
+            nav.classList.remove('hidden');
+            if (window.innerWidth <= 768) {
+                body.classList.add('nav-fixed');
+            }
+        });
+    </script>
 </body>
 </html>
