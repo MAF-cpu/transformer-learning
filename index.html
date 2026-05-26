@@ -1630,9 +1630,51 @@ class Transformer(nn.Module):
     </footer>
 
     <script>
-        // Smart Navigation: Hide on scroll down, show on scroll up (mobile only)
-        const nav = document.querySelector('nav');
+        // =======================
+        // DARK/LIGHT MODE TOGGLE
+        // =======================
+        const themeToggle = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
         const body = document.body;
+
+        // Load saved theme preference on startup
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('transformer-theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const isDark = savedTheme ? savedTheme === 'dark' : prefersDark;
+            
+            if (isDark) {
+                body.classList.remove('light-mode');
+                themeToggle.textContent = '☀️'; // Show sun when in dark mode
+            } else {
+                body.classList.add('light-mode');
+                themeToggle.textContent = '🌙'; // Show moon when in light mode
+            }
+        }
+
+        // Toggle theme on button click
+        themeToggle.addEventListener('click', () => {
+            const isLightMode = body.classList.contains('light-mode');
+            
+            if (isLightMode) {
+                body.classList.remove('light-mode');
+                localStorage.setItem('transformer-theme', 'dark');
+                themeToggle.textContent = '☀️';
+            } else {
+                body.classList.add('light-mode');
+                localStorage.setItem('transformer-theme', 'light');
+                themeToggle.textContent = '🌙';
+            }
+        });
+
+        // Initialize theme on page load
+        document.addEventListener('DOMContentLoaded', initializeTheme);
+        window.addEventListener('load', initializeTheme);
+
+        // =======================
+        // SMART NAVIGATION
+        // =======================
+        const nav = document.querySelector('nav');
         let lastScrollTop = 0;
         let scrollTimeout;
         const SCROLL_THRESHOLD = 5; // Pixels to scroll before triggering
