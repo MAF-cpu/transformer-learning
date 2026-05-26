@@ -1331,7 +1331,7 @@
             const colors = ['#60a5fa', '#f472b6', '#34d399', '#fbbf24'];
             const patterns = [
                 { name: 'Grammatik', pattern: (i, j) => Math.sin(i * 0.5) * Math.cos(j * 0.5) },
-                { name: 'Bedeutung', pattern: (i, j) => Math.exp(-(i - j) ** 2 / 3) },
+                { name: 'Bedeutung', pattern: (i, j) => Math.exp(-((i - j) ** 2) / 3) },
                 { name: 'Position', pattern: (i, j) => (i + j) / 10 },
                 { name: 'Details', pattern: (i, j) => Math.sin(i * j / 5) }
             ];
