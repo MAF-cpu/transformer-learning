@@ -1,53 +1,93 @@
 #!/bin/bash
 
-echo "🔍 TRANSFORMER LEARNING WEBSITE - QUALITY CHECK"
-echo "==============================================="
-echo ""
+# Transformer Learning Website Quality Check
+HTML_FILE="index.html"
+FAILED=0
 
-# 1. Lektionen
-echo "1️⃣ LEKTIONEN:"
-lesson_count=$(grep -c 'class="lesson"' index.html)
-echo "   Anzahl: $lesson_count (erwartet: 6+)"
-[[ $lesson_count -ge 6 ]] && echo "   ✅ OK" || echo "   ❌ FEHLER"
-echo ""
+echo "🔍 TRANSFORMER LEARNING WEBSITE QUALITY CHECK"
+echo "============================================="
 
-# 2. Inhalt
-echo "2️⃣ INHALT & STRUKTUR:"
-grep 'id="lesson' index.html | sed 's/.*id="\(.*\)".*/   - \1/'
-echo ""
+# 1. Lesson Count
+LESSONS=$(grep -c '<div class="lesson"' "$HTML_FILE")
+echo "✓ Lektionen: $LESSONS (mindestens 6 erforderlich)"
+[ $LESSONS -lt 6 ] && FAILED=1
 
-# 3. Bilder
-echo "3️⃣ BILDER/GRAFIKEN:"
-img_count=$(grep -c '<img' index.html)
-svg_count=$(grep -c '<svg' index.html)
-echo "   <img> Tags: $img_count"
-echo "   <svg> Diagramme: $svg_count"
-if [[ $img_count -gt 0 || $svg_count -gt 0 ]]; then
-    echo "   ✅ OK (SVG-Diagramme sind vorhanden)"
+# 2. SVG Diagrams
+SVGS=$(grep -c '<svg' "$HTML_FILE")
+echo "✓ SVG-Diagramme: $SVGS"
+[ $SVGS -lt $LESSONS ] && echo "⚠️  Nicht alle Lektionen haben Diagramme" && FAILED=1
+
+# 3. Mobile Viewport
+if grep -q 'viewport' "$HTML_FILE"; then
+    echo "✓ Mobile Viewport Meta Tag: OK"
 else
-    echo "   ❌ Keine Bilder oder Diagramme vorhanden"
+    echo "✗ Mobile Viewport Meta Tag: FEHLT"
+    FAILED=1
 fi
-echo ""
 
-# 4. Mobile Navigation
-echo "4️⃣ MOBILE SUPPORT:"
-grep -q 'viewport' index.html && echo "   ✅ Viewport Meta Tag vorhanden"
-grep -q '@media.*max-width.*768px' index.html && echo "   ✅ Mobile CSS vorhanden" || echo "   ❌ Mobile CSS fehlt"
-echo ""
+# 4. Dark Mode CSS
+DARK_CSS=$(grep -c 'dark-mode' "$HTML_FILE")
+echo "✓ Dark Mode CSS: $DARK_CSS Definitionen"
+[ $DARK_CSS -lt 5 ] && echo "⚠️  Dark Mode könnte unvollständig sein" && FAILED=1
 
-# 5. Dark Mode
-echo "5️⃣ DARK MODE:"
-if grep -q 'prefers-color-scheme' index.html || grep -q 'background.*#0f0f1e\|background.*#1a0033' index.html; then
-    echo "   ✅ Dark Mode vorhanden (Standard- oder @media-basiert)"
+# 5. Media Queries
+MEDIA=$(grep -c '@media' "$HTML_FILE")
+echo "✓ Media Queries: $MEDIA (Responsive Design)"
+[ $MEDIA -lt 2 ] && echo "⚠️  Zu wenig Media Queries" && FAILED=1
+
+# 6. Accessibility - ARIA Labels
+ARIA=$(grep -c 'aria-label' "$HTML_FILE")
+echo "✓ ARIA Labels: $ARIA"
+[ $ARIA -lt 5 ] && echo "⚠️  Wenige ARIA Labels" && FAILED=1
+
+# 7. Content - Paragraphs
+PARAS=$(grep -c '<p>' "$HTML_FILE")
+echo "✓ Absätze (Inhalt): $PARAS"
+[ $PARAS -lt 20 ] && echo "⚠️  Wenig Text-Inhalt" && FAILED=1
+
+# 8. Code Examples
+CODES=$(grep -c '<code>' "$HTML_FILE")
+echo "✓ Code-Beispiele: $CODES"
+[ $CODES -lt 3 ] && echo "⚠️  Wenige Code-Beispiele" && FAILED=1
+
+# 9. Key Points Sections
+KEYPTS=$(grep -c 'key-points' "$HTML_FILE")
+echo "✓ Key-Points Sektionen: $KEYPTS"
+[ $KEYPTS -lt 5 ] && echo "⚠️  Wenige Key-Points" && FAILED=1
+
+# 10. HTML5 DOCTYPE
+if grep -q '<!DOCTYPE html>' "$HTML_FILE"; then
+    echo "✓ HTML5 DOCTYPE: OK"
 else
-    echo "   ❌ DARK MODE NICHT VORHANDEN"
+    echo "✗ HTML5 DOCTYPE: FEHLT"
+    FAILED=1
 fi
-echo ""
 
-# 6. Kontrast
-echo "6️⃣ KONTRAST & LESBARKEIT:"
-echo "   Dark Mode Body: #e0e0e0 auf #1a0033 → 14.37:1 ✓ WCAG AAA"
-echo "   Light Mode Nav: #4c47c7 auf #f8f9fa → 6.57:1 ✓ WCAG AA"
-echo "   ✅ Alle Kontrastanforderungen erfüllt"
-echo ""
+# 11. Language Attribute
+if grep -q '<html lang="de">' "$HTML_FILE"; then
+    echo "✓ Sprache: Deutsch (DE)"
+else
+    echo "⚠️  Sprache nicht als Deutsch definiert"
+fi
 
+# 12. Navigation Links
+NAV_LINKS=$(grep '<a href="#lesson' "$HTML_FILE" | wc -l)
+echo "✓ Navigation Links: $NAV_LINKS"
+[ $NAV_LINKS -ne $LESSONS ] && echo "⚠️  Navigation stimmt nicht mit Lektionen überein" && FAILED=1
+
+# 13. JavaScript
+if grep -q '<script>' "$HTML_FILE"; then
+    echo "✓ JavaScript: Vorhanden (Theme Toggle, Smart Nav)"
+else
+    echo "⚠️  Kein JavaScript gefunden"
+fi
+
+echo ""
+echo "============================================="
+if [ $FAILED -eq 0 ]; then
+    echo "✅ ALLE QUALITÄTSPRÜFUNGEN BESTANDEN"
+    exit 0
+else
+    echo "⚠️  EINIGE PRÜFUNGEN FEHLGESCHLAGEN"
+    exit 1
+fi
