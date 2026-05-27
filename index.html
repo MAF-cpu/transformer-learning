@@ -57,44 +57,11 @@
             background: rgba(15, 15, 30, 0.95);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid #6366f1;
-            padding: 15px 20px;
+            padding: 15px 0;
             z-index: 100;
             transition: transform 0.3s ease-out;
             left: 0;
             right: 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .theme-toggle {
-            position: fixed;
-            top: 15px;
-            right: 20px;
-            z-index: 101;
-            background: #6366f1;
-            border: none;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 50%;
-            font-size: 1.5em;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 45px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .theme-toggle:hover {
-            background: #a78bfa;
-            transform: scale(1.1);
-        }
-
-        .theme-toggle:focus-visible {
-            outline: 2px solid #a78bfa;
-            outline-offset: 2px;
         }
 
         nav.hidden {
@@ -112,9 +79,8 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 8px;
-            padding: 0 60px 0 20px;
-            flex: 1;
+            gap: 10px;
+            padding: 0 20px;
         }
 
         nav a {
@@ -192,11 +158,9 @@
         }
 
         .lesson-text p {
-            color: #e0e0e0;
+            color: #d1d5db;
             line-height: 1.8;
             font-size: 1.05em;
-            text-rendering: optimizeLegibility;
-            -webkit-font-smoothing: antialiased;
         }
         
         @media (max-width: 480px) {
@@ -220,13 +184,6 @@
             max-width: 100%;
             height: auto;
             border-radius: 8px;
-            display: block;
-            visibility: visible !important;
-        }
-
-        svg {
-            display: block !important;
-            visibility: visible !important;
         }
 
         .code-example {
@@ -331,37 +288,17 @@
                 font-size: 1.5em;
             }
 
+            nav ul {
+                flex-direction: column;
+                gap: 5px;
+            }
+
             nav {
                 position: fixed;
                 top: 0;
                 left: 0;
                 right: 0;
                 width: 100%;
-                flex-wrap: wrap;
-            }
-
-            nav ul {
-                flex-direction: row;
-                gap: 3px;
-                padding: 0 60px 0 15px;
-                width: 100%;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            nav a {
-                font-size: 0.85em;
-                padding: 6px 10px;
-                white-space: nowrap;
-            }
-
-            .theme-toggle {
-                top: 8px;
-                right: 8px;
-                width: 40px;
-                height: 40px;
-                font-size: 1.2em;
-                padding: 8px;
             }
 
             body.nav-fixed {
@@ -369,7 +306,7 @@
             }
 
             .lesson {
-                padding: 20px;
+                padding: 25px;
             }
         }
 
@@ -406,130 +343,107 @@
         }
 
         /* Dark Mode Support */
-        
-        nav a:focus-visible {
-            outline: 2px solid #a78bfa;
-            outline-offset: 2px;
-        }
-        
-        .code-example:focus-visible,
-        .qa-box:focus-visible,
-        .formula:focus-visible,
-        .key-points:focus-visible {
-            outline: 2px solid #a78bfa;
-            outline-offset: 2px;
-        }
-        
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation: none !important;
-                transition: none !important;
-            }
-        }
-
         body.light-mode {
-            body {
-                color: #1f2937;
-                background: linear-gradient(135deg, #f8f9fa 0%, #f3f4f6 100%);
-            }
+            color: #1f2937;
+            background: linear-gradient(135deg, #f8f9fa 0%, #f3f4f6 100%);
+        }
 
-            h1 {
-                color: #0f172a;
-                text-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
-            }
+        body.light-mode h1 {
+            color: #0f172a;
+            text-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+        }
 
-            .subtitle {
-                color: #4c47c7;
-            }
+        body.light-mode .subtitle {
+            color: #4c47c7;
+        }
 
-            nav {
-                background: rgba(248, 249, 250, 0.95);
-                border-bottom-color: #4c47c7;
-            }
+        body.light-mode nav {
+            background: rgba(248, 249, 250, 0.95);
+            border-bottom-color: #4c47c7;
+        }
 
-            nav a {
-                color: #4c47c7;
-            }
+        body.light-mode nav a {
+            color: #4c47c7;
+        }
 
-            nav a:hover {
-                background: #4c47c7;
-                color: white;
-            }
+        body.light-mode nav a:hover {
+            background: #4c47c7;
+            color: white;
+        }
 
-            .lesson {
-                background: rgba(255, 255, 255, 0.8);
-                border-left-color: #4c47c7;
-                color: #1f2937;
-                box-shadow: 0 8px 32px rgba(99, 102, 241, 0.1);
-            }
+        body.light-mode .lesson {
+            background: rgba(255, 255, 255, 0.8);
+            border-left-color: #4c47c7;
+            color: #1f2937;
+            box-shadow: 0 8px 32px rgba(99, 102, 241, 0.1);
+        }
 
-            .lesson h2 {
-                color: #0f172a;
-            }
+        body.light-mode .lesson h2 {
+            color: #0f172a;
+        }
 
-            .lesson-text p {
-                color: #374151;
-            }
+        body.light-mode .lesson-text p {
+            color: #4b5563;
+        }
 
-            .lesson-image {
-                background: rgba(99, 102, 241, 0.05);
-            }
+        body.light-mode .lesson-image {
+            background: rgba(99, 102, 241, 0.05);
+        }
 
-            .code-example {
-                background: #f3f4f6;
-                border-color: #4c47c7;
-                color: #4c47c7;
-            }
+        body.light-mode .code-example {
+            background: #f3f4f6;
+            border-color: #4c47c7;
+            color: #4c47c7;
+        }
 
-            .code-example code {
-                color: #0f172a;
-            }
+        body.light-mode .code-example code {
+            color: #0f172a;
+        }
 
-            .qa-box {
-                background: rgba(99, 102, 241, 0.05);
-                color: #1f2937;
-            }
+        body.light-mode .qa-box {
+            background: rgba(99, 102, 241, 0.05);
+            color: #1f2937;
+        }
 
-            .qa-box strong {
-                color: #4c47c7;
-            }
+        body.light-mode .qa-box strong {
+            color: #4c47c7;
+        }
 
-            .formula {
-                background: rgba(99, 102, 241, 0.08);
-                border-color: #4c47c7;
-                color: #1f2937;
-            }
+        body.light-mode .formula {
+            background: rgba(99, 102, 241, 0.08);
+            border-color: #4c47c7;
+            color: #1f2937;
+        }
 
-            .key-points {
-                background: rgba(16, 185, 129, 0.08);
-            }
+        body.light-mode .key-points {
+            background: rgba(16, 185, 129, 0.08);
+        }
 
-            .key-points h4 {
-                color: #059669;
-            }
+        body.light-mode .key-points h4 {
+            color: #059669;
+        }
 
-            .key-points li {
-                color: #4b5563;
-            }
+        body.light-mode .key-points li {
+            color: #4b5563;
+        }
 
-            .key-points li:before {
-                color: #059669;
-            }
+        body.light-mode .key-points li:before {
+            color: #059669;
+        }
 
-            footer {
-                border-top-color: #4c47c7;
-                color: #4c47c7;
-            }
+        body.light-mode footer {
+            border-top-color: #4c47c7;
+            color: #4c47c7;
+        }
 
-            .highlight {
-                background: rgba(99, 102, 241, 0.15);
-                color: #0f172a;
-            }
+        body.light-mode .highlight {
+            background: rgba(99, 102, 241, 0.15);
+            color: #0f172a;
+        }
 
-            .lesson-number {
-                background: #4c47c7;
-                color: white;
-            }
+        body.light-mode .lesson-number {
+            background: #4c47c7;
+            color: white;
         }
 
         @media (prefers-color-scheme: light) {
@@ -573,7 +487,7 @@
             }
 
             .lesson-text p {
-                color: #374151;
+                color: #4b5563;
             }
 
             .lesson-image {
@@ -645,7 +559,6 @@
     </header>
 
     <nav>
-        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
         <ul>
             <li><a href="#lesson1">1. Einführung</a></li>
             <li><a href="#lesson2">2. RNN Problem</a></li>
@@ -682,7 +595,7 @@
                     </p>
                 </div>
                 <div class="lesson-image">
-                    <svg width="100%" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Transformer Encoder-Decoder Architektur mit selbstverursachter Aufmerksamkeit und Feed-Forward-Schichten">
+                    <svg width="100%" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
                         <defs>
                             <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
                                 <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
@@ -765,7 +678,7 @@
                     </p>
                 </div>
                 <div class="lesson-image">
-                    <svg width="100%" viewBox="0 0 300 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vergleich: Sequenzielles RNN Processing vs. Paralleles Transformer Processing">
+                    <svg width="100%" viewBox="0 0 300 350" xmlns="http://www.w3.org/2000/svg">
                         <!-- RNN Sequenz -->
                         <g>
                             <text x="150" y="25" text-anchor="middle" font-size="14" font-weight="bold" fill="#f0f9ff">Sequenzielles RNN Processing</text>
@@ -878,7 +791,7 @@ attention_output = attention(sequence, sequence, sequence)  # Alle gleichzeitig!
                     </p>
                 </div>
                 <div class="lesson-image">
-                    <svg width="100%" viewBox="0 0 300 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vergleich: Sequenzielles RNN Processing vs. Paralleles Transformer Processing">
+                    <svg width="100%" viewBox="0 0 300 350" xmlns="http://www.w3.org/2000/svg">
                         <text x="150" y="25" text-anchor="middle" font-size="14" font-weight="bold" fill="#f0f9ff">Attention Mechanismus</text>
                         
                         <!-- Input -->
@@ -972,7 +885,7 @@ def attention(Q, K, V):
                     </p>
                 </div>
                 <div class="lesson-image">
-                    <svg width="100%" viewBox="0 0 320 300" xmlns="http://www.w3.org/2000/svg" aria-label="Scaled Dot-Product Attention: Schritt-für-Schritt-Visualisierung" role="img">
+                    <svg width="100%" viewBox="0 0 320 300" xmlns="http://www.w3.org/2000/svg">
                         <text x="160" y="20" text-anchor="middle" font-size="13" font-weight="bold" fill="#f0f9ff">Scaled Dot-Product: Schritt für Schritt</text>
                         
                         <!-- Step 1 -->
@@ -1077,7 +990,7 @@ def attention(Q, K, V):
                     </p>
                 </div>
                 <div class="lesson-image">
-                    <svg width="100%" viewBox="0 0 300 380" xmlns="http://www.w3.org/2000/svg" aria-label="Multi-Head Attention Mechanismus mit mehreren Aufmerksamkeitsköpfen" role="img">
+                    <svg width="100%" viewBox="0 0 300 380" xmlns="http://www.w3.org/2000/svg">
                         <text x="150" y="20" text-anchor="middle" font-size="13" font-weight="bold" fill="#f0f9ff">Multi-Head Attention</text>
                         
                         <!-- Input -->
@@ -1219,7 +1132,7 @@ class MultiHeadAttention(nn.Module):
                     </p>
                 </div>
                 <div class="lesson-image">
-                    <svg width="100%" viewBox="0 0 300 320" xmlns="http://www.w3.org/2000/svg" aria-label="Positional Encoding zur Erfassung der Sequenzposition" role="img">
+                    <svg width="100%" viewBox="0 0 300 320" xmlns="http://www.w3.org/2000/svg">
                         <text x="150" y="20" text-anchor="middle" font-size="13" font-weight="bold" fill="#f0f9ff">Positional Encoding</text>
                         
                         <!-- Tokens ohne Position -->
@@ -1328,7 +1241,7 @@ def positional_encoding(seq_len, d_model):
                     </p>
                 </div>
                 <div class="lesson-image">
-                    <svg width="100%" viewBox="0 0 300 450" xmlns="http://www.w3.org/2000/svg" aria-label="Transformer-Encoder-Decoder-Architektur mit vollständiger Struktur" role="img">
+                    <svg width="100%" viewBox="0 0 300 450" xmlns="http://www.w3.org/2000/svg">
                         <text x="150" y="20" text-anchor="middle" font-size="13" font-weight="bold" fill="#f0f9ff">Transformer Block</text>
                         
                         <!-- Input -->
@@ -1474,7 +1387,7 @@ class TransformerBlock(nn.Module):
                     </p>
                 </div>
                 <div class="lesson-image">
-                    <svg width="100%" viewBox="0 0 320 420" xmlns="http://www.w3.org/2000/svg" aria-label="Transformer Training und Verlauf der Verlustfunktion" role="img">
+                    <svg width="100%" viewBox="0 0 320 420" xmlns="http://www.w3.org/2000/svg">
                         <text x="160" y="20" text-anchor="middle" font-size="13" font-weight="bold" fill="#f0f9ff">Complete Transformer Architektur</text>
                         
                         <!-- Input -->
@@ -1662,7 +1575,7 @@ class Transformer(nn.Module):
             </div>
 
             <div class="lesson-image" style="margin-top: 30px; margin-bottom: 30px;">
-                <svg width="100%" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" aria-label="Einführung in Fine-Tuning für verschiedene NLP-Aufgaben" role="img">
+                <svg width="100%" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
                     <!-- Title -->
                     <text x="200" y="25" font-size="20" font-weight="bold" text-anchor="middle" fill="#10b981">Transformer Architektur - Überblick</text>
                     
@@ -1734,51 +1647,9 @@ class Transformer(nn.Module):
     </footer>
 
     <script>
-        // =======================
-        // DARK/LIGHT MODE TOGGLE
-        // =======================
-        const themeToggle = document.getElementById('theme-toggle');
-        const htmlElement = document.documentElement;
-        const body = document.body;
-
-        // Load saved theme preference on startup
-        function initializeTheme() {
-            const savedTheme = localStorage.getItem('transformer-theme');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const isDark = savedTheme ? savedTheme === 'dark' : prefersDark;
-            
-            if (isDark) {
-                body.classList.remove('light-mode');
-                themeToggle.textContent = '☀️'; // Show sun when in dark mode
-            } else {
-                body.classList.add('light-mode');
-                themeToggle.textContent = '🌙'; // Show moon when in light mode
-            }
-        }
-
-        // Toggle theme on button click
-        themeToggle.addEventListener('click', () => {
-            const isLightMode = body.classList.contains('light-mode');
-            
-            if (isLightMode) {
-                body.classList.remove('light-mode');
-                localStorage.setItem('transformer-theme', 'dark');
-                themeToggle.textContent = '☀️';
-            } else {
-                body.classList.add('light-mode');
-                localStorage.setItem('transformer-theme', 'light');
-                themeToggle.textContent = '🌙';
-            }
-        });
-
-        // Initialize theme on page load
-        document.addEventListener('DOMContentLoaded', initializeTheme);
-        window.addEventListener('load', initializeTheme);
-
-        // =======================
-        // SMART NAVIGATION
-        // =======================
+        // Smart Navigation: Hide on scroll down, show on scroll up (mobile only)
         const nav = document.querySelector('nav');
+        const body = document.body;
         let lastScrollTop = 0;
         let scrollTimeout;
         const SCROLL_THRESHOLD = 5; // Pixels to scroll before triggering
