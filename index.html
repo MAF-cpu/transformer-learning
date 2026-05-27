@@ -554,8 +554,15 @@
 </head>
 <body>
     <header>
-        <h1><span class="emoji">🤖</span>Transformer Learning</h1>
-        <p class="subtitle">Ein vollständiger Leitfaden zu Transformers – Von Grundlagen bis Architektur</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+            <div>
+                <h1><span class="emoji">🤖</span>Transformer Learning</h1>
+                <p class="subtitle">Ein vollständiger Leitfaden zu Transformers – Von Grundlagen bis Architektur</p>
+            </div>
+            <button id="theme-toggle" aria-label="Theme zwischen Dunkel und Hell umschalten" style="padding: 10px 16px; border-radius: 6px; border: 2px solid #6366f1; background: rgba(99, 102, 241, 0.1); color: #a78bfa; font-size: 1em; cursor: pointer; transition: all 0.3s; font-weight: bold;" title="Toggle Dark/Light Mode">
+                🌙 Dark Mode
+            </button>
+        </div>
     </header>
 
     <nav aria-label="Hauptnavigation">
@@ -1703,7 +1710,64 @@ class Transformer(nn.Module):
             if (window.innerWidth <= 768) {
                 body.classList.add('nav-fixed');
             }
+            
+            // Initialize theme toggle
+            initializeThemeToggle();
         });
+        
+        // Theme Toggle Functionality
+        function initializeThemeToggle() {
+            const themeToggle = document.getElementById('theme-toggle');
+            if (!themeToggle) return;
+            
+            // Load theme preference from localStorage
+            const savedTheme = localStorage.getItem('transformer-theme') || 'dark';
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const isDark = savedTheme === 'dark' || (savedTheme === 'system' && prefersDark);
+            
+            // Apply saved theme
+            if (isDark) {
+                document.body.classList.remove('light-mode');
+                updateThemeButtonText(false);
+            } else {
+                document.body.classList.add('light-mode');
+                updateThemeButtonText(true);
+            }
+            
+            // Handle theme toggle click
+            themeToggle.addEventListener('click', () => {
+                const isLight = document.body.classList.contains('light-mode');
+                if (isLight) {
+                    document.body.classList.remove('light-mode');
+                    localStorage.setItem('transformer-theme', 'dark');
+                    updateThemeButtonText(false);
+                } else {
+                    document.body.classList.add('light-mode');
+                    localStorage.setItem('transformer-theme', 'light');
+                    updateThemeButtonText(true);
+                }
+            });
+            
+            // Listen to system theme changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (localStorage.getItem('transformer-theme') === 'system') {
+                    if (e.matches) {
+                        document.body.classList.remove('light-mode');
+                        updateThemeButtonText(false);
+                    } else {
+                        document.body.classList.add('light-mode');
+                        updateThemeButtonText(true);
+                    }
+                }
+            });
+        }
+        
+        function updateThemeButtonText(isLight) {
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                themeToggle.textContent = isLight ? '🌙 Light Mode' : '🌙 Dark Mode';
+            }
+        }
     </script>
 </body>
 </html>
