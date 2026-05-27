@@ -558,17 +558,17 @@
         <p class="subtitle">Ein vollständiger Leitfaden zu Transformers – Von Grundlagen bis Architektur</p>
     </header>
 
-    <nav>
+    <nav aria-label="Hauptnavigation">
         <ul>
-            <li><a href="#lesson1">1. Einführung</a></li>
-            <li><a href="#lesson2">2. RNN Problem</a></li>
-            <li><a href="#lesson3">3. Attention</a></li>
-            <li><a href="#lesson4">4. Scaled Dot-Product</a></li>
-            <li><a href="#lesson5">5. Multi-Head</a></li>
-            <li><a href="#lesson6">6. Positional Encoding</a></li>
-            <li><a href="#lesson7">7. Transformer Block</a></li>
-            <li><a href="#lesson8">8. Complete Architektur</a></li>
-            <li><a href="#lesson9">9. Zusammenfassung</a></li>
+            <li><a href="#lesson1" aria-label="Lektion 1: Einführung - Was sind Transformer?">1. Einführung</a></li>
+            <li><a href="#lesson2" aria-label="Lektion 2: RNN Problem - Warum Transformer?">2. RNN Problem</a></li>
+            <li><a href="#lesson3" aria-label="Lektion 3: Attention Mechanism - Grundlagen">3. Attention</a></li>
+            <li><a href="#lesson4" aria-label="Lektion 4: Scaled Dot-Product Attention - Mathematik">4. Scaled Dot-Product</a></li>
+            <li><a href="#lesson5" aria-label="Lektion 5: Multi-Head Attention - Parallele Verarbeitung">5. Multi-Head</a></li>
+            <li><a href="#lesson6" aria-label="Lektion 6: Positional Encoding - Positionsinformation">6. Positional Encoding</a></li>
+            <li><a href="#lesson7" aria-label="Lektion 7: Transformer Block - Architektur">7. Transformer Block</a></li>
+            <li><a href="#lesson8" aria-label="Lektion 8: Complete Architektur - Encoder-Decoder">8. Complete Architektur</a></li>
+            <li><a href="#lesson9" aria-label="Lektion 9: Zusammenfassung - Wissenstest">9. Zusammenfassung</a></li>
         </ul>
     </nav>
 
@@ -595,7 +595,7 @@
                     </p>
                 </div>
                 <div class="lesson-image">
-                    <svg width="100%" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="100%" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagramm: RNN vs Transformer - Parallele vs sequenzielle Verarbeitung">
                         <defs>
                             <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
                                 <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
@@ -678,7 +678,7 @@
                     </p>
                 </div>
                 <div class="lesson-image">
-                    <svg width="100%" viewBox="0 0 300 350" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="100%" viewBox="0 0 300 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagramm: RNN vs Transformer - Parallele vs sequenzielle Verarbeitung">
                         <!-- RNN Sequenz -->
                         <g>
                             <text x="150" y="25" text-anchor="middle" font-size="14" font-weight="bold" fill="#f0f9ff">Sequenzielles RNN Processing</text>
@@ -791,7 +791,7 @@ attention_output = attention(sequence, sequence, sequence)  # Alle gleichzeitig!
                     </p>
                 </div>
                 <div class="lesson-image">
-                    <svg width="100%" viewBox="0 0 300 350" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="100%" viewBox="0 0 300 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagramm: RNN sequenzieller Verarbeitung - Tokens werden nacheinander verarbeitet">
                         <text x="150" y="25" text-anchor="middle" font-size="14" font-weight="bold" fill="#f0f9ff">Attention Mechanismus</text>
                         
                         <!-- Input -->
@@ -885,7 +885,7 @@ def attention(Q, K, V):
                     </p>
                 </div>
                 <div class="lesson-image">
-                    <svg width="100%" viewBox="0 0 320 300" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="100%" viewBox="0 0 320 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagramm: Attention Mechanism - Query, Key, Value Transformation">
                         <text x="160" y="20" text-anchor="middle" font-size="13" font-weight="bold" fill="#f0f9ff">Scaled Dot-Product: Schritt für Schritt</text>
                         
                         <!-- Step 1 -->
@@ -990,7 +990,7 @@ def attention(Q, K, V):
                     </p>
                 </div>
                 <div class="lesson-image">
-                    <svg width="100%" viewBox="0 0 300 380" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="100%" viewBox="0 0 300 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagramm: Scaled Dot-Product Attention - Mathematische Formel mit Softmax">
                         <text x="150" y="20" text-anchor="middle" font-size="13" font-weight="bold" fill="#f0f9ff">Multi-Head Attention</text>
                         
                         <!-- Input -->
@@ -1132,7 +1132,7 @@ class MultiHeadAttention(nn.Module):
                     </p>
                 </div>
                 <div class="lesson-image">
-                    <svg width="100%" viewBox="0 0 300 320" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="100%" viewBox="0 0 300 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagramm: Multi-Head Attention - Parallele Attention Heads mit Concatenation">
                         <text x="150" y="20" text-anchor="middle" font-size="13" font-weight="bold" fill="#f0f9ff">Positional Encoding</text>
                         
                         <!-- Tokens ohne Position -->
@@ -1241,7 +1241,7 @@ def positional_encoding(seq_len, d_model):
                     </p>
                 </div>
                 <div class="lesson-image">
-                    <svg width="100%" viewBox="0 0 300 450" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="100%" viewBox="0 0 300 450" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagramm: Positional Encoding - Sinusförmige Muster für Positionsinformation">
                         <text x="150" y="20" text-anchor="middle" font-size="13" font-weight="bold" fill="#f0f9ff">Transformer Block</text>
                         
                         <!-- Input -->
@@ -1387,7 +1387,7 @@ class TransformerBlock(nn.Module):
                     </p>
                 </div>
                 <div class="lesson-image">
-                    <svg width="100%" viewBox="0 0 320 420" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="100%" viewBox="0 0 320 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagramm: Transformer Block - Feed Forward Network und Attention zusammen">
                         <text x="160" y="20" text-anchor="middle" font-size="13" font-weight="bold" fill="#f0f9ff">Complete Transformer Architektur</text>
                         
                         <!-- Input -->
@@ -1575,7 +1575,7 @@ class Transformer(nn.Module):
             </div>
 
             <div class="lesson-image" style="margin-top: 30px; margin-bottom: 30px;">
-                <svg width="100%" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                <svg width="100%" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagramm: Complete Transformer Architektur - Encoder-Decoder mit Cross-Attention">
                     <!-- Title -->
                     <text x="200" y="25" font-size="20" font-weight="bold" text-anchor="middle" fill="#10b981">Transformer Architektur - Überblick</text>
                     
