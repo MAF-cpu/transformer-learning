@@ -21,10 +21,15 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
             line-height: 1.6;
-            color: #e0e0e0;
-            background: linear-gradient(135deg, #0f0f1e 0%, #1a0033 100%);
+            color: #1f2937;
+            background: linear-gradient(135deg, #f8f9fa 0%, #f3f4f6 100%);
             min-height: 100vh;
             padding: 20px;
+        }
+
+        body.dark-mode {
+            color: #e0e0e0;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a0033 100%);
         }
 
         header {
@@ -343,105 +348,111 @@
         }
 
         /* Dark Mode Support */
-        body.light-mode {
-            color: #1f2937;
-            background: linear-gradient(135deg, #f8f9fa 0%, #f3f4f6 100%);
-        }
 
-        body.light-mode h1 {
+
+        body h1 {
             color: #0f172a;
             text-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
         }
 
-        body.light-mode .subtitle {
+        body.dark-mode h1 {
+            color: #f0f9ff;
+            text-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+        }
+
+        body .subtitle {
             color: #4c47c7;
         }
 
-        body.light-mode nav {
+        body.dark-mode .subtitle {
+            color: #a78bfa;
+        }
+
+        body nav {
             background: rgba(248, 249, 250, 0.95);
             border-bottom-color: #4c47c7;
         }
 
-        body.light-mode nav a {
+        body nav a {
             color: #4c47c7;
         }
 
-        body.light-mode nav a:hover {
+        body nav a:hover {
             background: #4c47c7;
             color: white;
         }
 
-        body.light-mode .lesson {
+        body .lesson {
             background: rgba(255, 255, 255, 0.8);
             border-left-color: #4c47c7;
             color: #1f2937;
             box-shadow: 0 8px 32px rgba(99, 102, 241, 0.1);
         }
 
-        body.light-mode .lesson h2 {
+        body .lesson h2 {
             color: #0f172a;
         }
 
-        body.light-mode .lesson-text p {
+        body .lesson-text p {
             color: #4b5563;
         }
 
-        body.light-mode .lesson-image {
+        body .lesson-image {
             background: rgba(99, 102, 241, 0.05);
         }
 
-        body.light-mode .code-example {
+        body .code-example {
             background: #f3f4f6;
             border-color: #4c47c7;
             color: #4c47c7;
         }
 
-        body.light-mode .code-example code {
+        body .code-example code {
             color: #0f172a;
         }
 
-        body.light-mode .qa-box {
+        body .qa-box {
             background: rgba(99, 102, 241, 0.05);
             color: #1f2937;
         }
 
-        body.light-mode .qa-box strong {
+        body .qa-box strong {
             color: #4c47c7;
         }
 
-        body.light-mode .formula {
+        body .formula {
             background: rgba(99, 102, 241, 0.08);
             border-color: #4c47c7;
             color: #1f2937;
         }
 
-        body.light-mode .key-points {
+        body .key-points {
             background: rgba(16, 185, 129, 0.08);
         }
 
-        body.light-mode .key-points h4 {
+        body .key-points h4 {
             color: #059669;
         }
 
-        body.light-mode .key-points li {
+        body .key-points li {
             color: #4b5563;
         }
 
-        body.light-mode .key-points li:before {
+        body .key-points li:before {
             color: #059669;
         }
 
-        body.light-mode footer {
+        body footer {
             border-top-color: #4c47c7;
             color: #4c47c7;
         }
 
-        body.light-mode .highlight {
+        body .highlight {
             background: rgba(99, 102, 241, 0.15);
             color: #0f172a;
         }
 
-        body.light-mode .lesson-number {
+        body .lesson-number {
             background: #4c47c7;
             color: white;
         }
@@ -1721,49 +1732,51 @@ class Transformer(nn.Module):
             if (!themeToggle) return;
             
             // Load theme preference from localStorage
-            const savedTheme = localStorage.getItem('transformer-theme') || 'dark';
+            const savedTheme = localStorage.getItem('transformer-theme') || 'light';
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             const isDark = savedTheme === 'dark' || (savedTheme === 'system' && prefersDark);
             
             // Apply saved theme
             if (isDark) {
-                document.body.classList.remove('light-mode');
-                updateThemeButtonText(false);
-            } else {
-                document.body.classList.add('light-mode');
+                document.body.classList.add('dark-mode');
                 updateThemeButtonText(true);
+            } else {
+                document.body.classList.remove('dark-mode');
+                updateThemeButtonText(false);
             }
             
             // Handle theme toggle click
             themeToggle.addEventListener('click', () => {
-                const isLight = document.body.classList.contains('light-mode');
-                if (isLight) {
-                    localStorage.setItem('transformer-theme', 'dark');
-                } else {
+                const isDark = document.body.classList.contains('dark-mode');
+                if (isDark) {
+                    document.body.classList.remove('dark-mode');
                     localStorage.setItem('transformer-theme', 'light');
+                    updateThemeButtonText(false);
+                } else {
+                    document.body.classList.add('dark-mode');
+                    localStorage.setItem('transformer-theme', 'dark');
+                    updateThemeButtonText(true);
                 }
-                // Reload to apply theme properly
-                location.reload();
             });
             
             // Listen to system theme changes
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
                 if (localStorage.getItem('transformer-theme') === 'system') {
                     if (e.matches) {
-                        document.body.classList.remove('light-mode');
-                        updateThemeButtonText(false);
-                    } else {
-                        document.body.classList.add('light-mode');
+                        document.body.classList.add('dark-mode');
                         updateThemeButtonText(true);
+                    } else {
+                        document.body.classList.remove('dark-mode');
+                        updateThemeButtonText(false);
                     }
                 }
             });
         }
         
-        function updateThemeButtonText(isLight) {
+        function updateThemeButtonText(isDark) {
             const themeToggle = document.getElementById('theme-toggle');
             if (themeToggle) {
-                themeToggle.textContent = isLight ? '🌙 Light Mode' : '🌙 Dark Mode';
+                themeToggle.textContent = isDark ? '🌙 Light Mode' : '🌙 Dark Mode';
             }
         }
     </script>
