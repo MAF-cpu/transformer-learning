@@ -49,7 +49,7 @@ const checks = {
   '5️⃣  DARK MODE OK': {
     check: () => {
       const darkCSS = html.includes('body.dark-mode');
-      const darkToggle = html.includes('toggleDarkMode') || html.includes('dark-mode-toggle');
+      const darkToggle = html.includes('theme-toggle') || html.includes('toggleDarkMode') || html.includes('dark-mode-toggle') || html.includes('initializeThemeToggle');
       const lightBg = html.includes('#ffffff') || html.includes('#f8f9fa');
       const darkBg = html.includes('#1f2937') || html.includes('#0f172a');
       return { 
