@@ -1728,32 +1728,6 @@ class Transformer(nn.Module):
             if (window.innerWidth <= 768) {
                 body.classList.add('nav-fixed');
             }
-            
-            // Theme toggle functionality
-            const themeToggle = document.getElementById('theme-toggle');
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            
-            function setTheme(theme) {
-                if (theme === 'light') {
-                    body.classList.add('light-mode');
-                    themeToggle.textContent = '🌙';
-                    localStorage.setItem('theme', 'light');
-                } else {
-                    body.classList.remove('light-mode');
-                    themeToggle.textContent = '☀️';
-                    localStorage.setItem('theme', 'dark');
-                }
-            }
-            
-            // Set initial theme
-            setTheme(savedTheme);
-            
-            // Toggle on click
-            themeToggle.addEventListener('click', () => {
-                const currentTheme = body.classList.contains('light-mode') ? 'light' : 'dark';
-                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-                setTheme(newTheme);
-            });
         });
     </script>
 </body>
